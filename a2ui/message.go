@@ -1,13 +1,11 @@
 package a2ui
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
-	"strings"
 )
 
 // CurrentVersion is the protocol version this package implements and emits.
@@ -226,18 +224,21 @@ func parseEach(raws []json.RawMessage) ([]Message, error) {
 	return out, nil
 }
 
-// ReadMessages reads JSON Lines from r and calls fn for every envelope. A
-// line may hold one envelope or an array of them; blank lines are skipped.
-// Reading stops at the first error returned by fn.
+// ReadMessages reads a stream of JSON values from r and calls fn for every
+// envelope. Values may be separated by newlines (JSON Lines) or not at all;
+// each may be one envelope, an array of envelopes or an example-file object
+// with a "messages" array. Reading stops at the first error returned by fn.
 func ReadMessages(r io.Reader, fn func(Message) error) error {
-	sc := bufio.NewScanner(r)
-	sc.Buffer(make([]byte, 0, 64*1024), 64*1024*1024)
-	for sc.Scan() {
-		line := strings.TrimSpace(sc.Text())
-		if line == "" {
-			continue
+	dec := json.NewDecoder(r)
+	for {
+		var raw json.RawMessage
+		if err := dec.Decode(&raw); err != nil {
+			if errors.Is(err, io.EOF) {
+				return nil
+			}
+			return fmt.Errorf("a2ui: read messages: %w", err)
 		}
-		msgs, err := ParseMessages([]byte(line))
+		msgs, err := ParseMessages(raw)
 		if err != nil {
 			return err
 		}
@@ -247,5 +248,4 @@ func ReadMessages(r io.Reader, fn func(Message) error) error {
 			}
 		}
 	}
-	return sc.Err()
 }

@@ -72,6 +72,7 @@ type Model struct {
 	measures map[string][2]int
 	scroll   int
 	status   string
+	failed   bool
 	seen     bool
 	quitting bool
 	now      func() time.Time
@@ -140,7 +141,7 @@ func (m *Model) Apply(msg a2ui.Message) error {
 	}
 	if err != nil {
 		m.log.Printf("error: %v", err)
-		m.status = err.Error()
+		m.status, m.failed = err.Error(), true
 		m.emit(a2ui.ErrorMessage(err, msg.SurfaceID()))
 	} else if m.store.Len() > 0 {
 		m.seen = true
@@ -185,7 +186,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.status = ""
 		m.rebuild()
 	case StatusMsg:
-		m.status = string(msg)
+		m.status, m.failed = string(msg), false
 	case tea.MouseWheelMsg:
 		switch msg.Button {
 		case tea.MouseWheelUp:
@@ -409,11 +410,11 @@ func (m *Model) Dispatch(n a2ui.Node) tea.Cmd {
 	case call != nil:
 		name, args, ok := a2ui.IsCall(call)
 		if !ok {
-			m.status = "action.functionCall needs @call"
+			m.status, m.failed = "action.functionCall needs @call", true
 			break
 		}
 		if _, err := m.eval.Call(name, args, n.Scope); err != nil {
-			m.status = err.Error()
+			m.status, m.failed = err.Error(), true
 			m.log.Printf("functionCall %s: %v", name, err)
 		}
 	}
@@ -503,8 +504,11 @@ func (m *Model) content(width int) string {
 }
 
 func (m *Model) helpLine() string {
-	if m.status != "" {
+	if m.status != "" && m.failed {
 		return m.theme.Error.Render(ansi.Truncate("! "+m.status, m.width, "…"))
+	}
+	if m.status != "" {
+		return m.theme.Accent.Render(ansi.Truncate(m.status, m.width, "…"))
 	}
 	keys := "tab/shift+tab move · enter/space press · ←/→ adjust · q quit"
 	if m.modal != "" {

@@ -76,7 +76,9 @@ func TestReadMessages(t *testing.T) {
 	in := strings.Join([]string{
 		`{"version":"v1.0","createSurface":{"surfaceId":"s","catalogId":"c"}}`,
 		``,
-		`[{"version":"v1.0","updateDataModel":{"surfaceId":"s","value":{"a":1}}},{"version":"v1.0","deleteSurface":{"surfaceId":"s"}}]`,
+		`[{"version":"v1.0","updateDataModel":{"surfaceId":"s","value":{"a":1}}},{"version":"v1.0",`,
+		` "deleteSurface":{"surfaceId":"s"}}]`,
+		`{"messages":[{"version":"v1.0","deleteSurface":{"surfaceId":"t"}}]}`,
 	}, "\n")
 	var kinds []string
 	err := ReadMessages(strings.NewReader(in), func(m Message) error {
@@ -86,7 +88,10 @@ func TestReadMessages(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := "createSurface,updateDataModel,deleteSurface"
+	if err := ReadMessages(strings.NewReader(`{"version":"v1.0","deleteSurface":{"surfaceId":"s"}} {bad`), func(Message) error { return nil }); err == nil {
+		t.Error("truncated input must fail")
+	}
+	want := "createSurface,updateDataModel,deleteSurface,deleteSurface"
 	if got := strings.Join(kinds, ","); got != want {
 		t.Errorf("kinds = %s, want %s", got, want)
 	}

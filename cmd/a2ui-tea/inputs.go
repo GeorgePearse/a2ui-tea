@@ -68,7 +68,7 @@ func streamURL(p *tea.Program, url string, logger *log.Logger) {
 		p.Send(render.StatusMsg("url: " + err.Error()))
 		return
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode >= 300 {
 		p.Send(render.StatusMsg(fmt.Sprintf("url: HTTP %d", resp.StatusCode)))
 		return
@@ -124,6 +124,6 @@ func postJSON(url string, body []byte, logger *log.Logger, status func(string)) 
 		}
 		return
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	logger.Printf("post %s -> %d", url, resp.StatusCode)
 }

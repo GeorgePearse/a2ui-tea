@@ -28,8 +28,6 @@ type step struct {
 	json  string
 }
 
-const demoSurface = "demo"
-
 var demoSteps = []step{
 	{0, `{"version":"v1.0","createSurface":{"surfaceId":"demo","catalogId":"` + catalog.BasicCatalogID + `","sendDataModel":true,
 	  "components":[

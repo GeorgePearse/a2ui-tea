@@ -54,7 +54,7 @@ func parseFlags(args []string) (config, error) {
 	fs.BoolVar(&c.noHelp, "no-help", false, "hide the key hints line")
 	fs.BoolVar(&c.stay, "stay", false, "keep running after the last surface is deleted")
 	fs.Usage = func() {
-		fmt.Fprintf(fs.Output(), "usage: a2ui-tea (--stdin | --file PATH | --url URL | demo) [flags]\n\n")
+		_, _ = fmt.Fprintf(fs.Output(), "usage: a2ui-tea (--stdin | --file PATH | --url URL | demo) [flags]\n\n")
 		fs.PrintDefaults()
 	}
 	var rest []string
@@ -92,7 +92,7 @@ func run(args []string) error {
 		if err != nil {
 			return err
 		}
-		defer f.Close()
+		defer func() { _ = f.Close() }()
 		logger = log.New(f, "", log.Ltime|log.Lmicroseconds)
 	}
 
@@ -100,8 +100,8 @@ func run(args []string) error {
 	if err != nil {
 		return fmt.Errorf("a terminal is required: %w", err)
 	}
-	defer ttyIn.Close()
-	defer ttyOut.Close()
+	defer func() { _ = ttyIn.Close() }()
+	defer func() { _ = ttyOut.Close() }()
 
 	sink := newSink(os.Stdout, cfg, logger)
 	var program *tea.Program

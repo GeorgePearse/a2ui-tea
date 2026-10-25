@@ -244,16 +244,16 @@ func fnPluralize(e *Evaluator, args map[string]any, s *Scope) (any, error) {
 		}
 		return "", false
 	}
-	switch {
-	case n == 0:
+	switch n {
+	case 0:
 		if str, ok := pick("zero"); ok {
 			return str, nil
 		}
-	case n == 1:
+	case 1:
 		if str, ok := pick("one"); ok {
 			return str, nil
 		}
-	case n == 2:
+	case 2:
 		if str, ok := pick("two"); ok {
 			return str, nil
 		}

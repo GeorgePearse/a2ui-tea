@@ -1,0 +1,6 @@
+/a2ui-tea
+/dist/
+*.test
+*.out
+/docs/*.mp4
+/.vhs-tmp/

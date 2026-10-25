@@ -1,0 +1,9 @@
+╭──────────────────────────────────────────────────────────╮
+│ Product Launch Meeting                                   │
+│ 📅 Fri, Dec 19 • 2:00 PM - 3:30 PM                       │
+│ 📍 Conference Room A, Building 2                         │
+│ Review final product specs and marketing materials       │
+│ before the Q1 launch.                                    │
+│ ──────────────────────────────────────────────────────── │
+│ [ Accept ] [ Decline ]                                   │
+╰──────────────────────────────────────────────────────────╯

@@ -1,0 +1,6 @@
+The JSON files in this directory are the A2UI basic catalog examples,
+copied verbatim from https://github.com/a2ui-project/a2ui
+(catalogs/basic/v1/examples/) and used here as renderer test fixtures.
+
+They are licensed under the Apache License, Version 2.0; see LICENSE in this
+directory. Copyright belongs to the A2UI project authors.

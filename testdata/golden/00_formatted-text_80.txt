@@ -1,0 +1,4 @@
+Type something:
+›                                                                               
+Formatted output:
+You typed: 

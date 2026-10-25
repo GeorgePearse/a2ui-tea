@@ -1,0 +1,2 @@
+Modal Component Sample
+[ Open Modal ]

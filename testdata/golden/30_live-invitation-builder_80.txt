@@ -1,0 +1,12 @@
+Invitation Builder
+Customize your invitation                             Live Preview              
+Event Name                              ╭──────────────────────────────────────╮
+› Summer Gala                           │ ┌──────────────────────────────────┐ │
+Guest of Honor                          │ │             ▣ image              │ │
+  Alex Johnson                          │ │ https://images.unsplash.com/pho… │ │
+📅 Event Date & Time                    │ └──────────────────────────────────┘ │
+  2025-07-15T19:00:00Z                  │             Summer Gala              │
+Location                                │       Celebrating Alex Johnson       │
+( Grand Ballroom ) (•Sunset Terrace) (  │  Tuesday, July 15, 2025 at 7:00 PM   │
+Garden Pavillion )                      │          Location: terrace           │
+                                        ╰──────────────────────────────────────╯

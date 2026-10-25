@@ -1,0 +1,4 @@
+System Dashboard
+╭─────────────────────────────────────────────────────────╮ System boot complete.                                       
+│ Analytics are ready.                                    │ All services healthy.                                       
+╰─────────────────────────────────────────────────────────╯ Waiting for user input.                                     
